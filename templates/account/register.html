@@ -1,0 +1,50 @@
+{% extends 'layout.html' %}
+{% block content %}
+        
+        <main class="grid justify-items-center items-center w-screen md:min-h-screen bg-white my-6">
+
+            <section class="container grid gap-5 border border-hoverBackgroundColor border-solid w-11/12 my-10 md:my-0 md:w-5/12 py-5 px-10 rounded-lg">
+                <div class="text-black">
+                    <h2 class="text-2xl font-semibold text-primaryDark">Register In With</h2>
+                </div>
+                <hr>
+    
+                <div class="grid gap-4">
+                    {% if messages %}
+                        {% for message in messages %}
+                            {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %} 
+                            <div class="flex justify-between items-center border-2 border-solid border-red-700 px-6 pb-3 py-2 text-red-700 text-lg rounded-md font-semibold leading-5" onclick="(function(){event.target.style.display = 'none';return false;})()">
+                                <p>{{ message }}</p>
+                                <button class="flex justify-center items-center font-medium"><i class="fa fa-close"></i></button>
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                    <form action="{% url 'auth_app:register' %}" method="post" class="grid gap-4">
+                        {% csrf_token %}
+                        <div class="grid gap-2">
+                            <label class="text-lg text-primaryDark font-medium" for="">Username</label>
+                            <input type="text" class="outline-none focus:bg-headerBg text-lg pb-2 py-1 px-4 border border-gray-400 border-solid rounded w-full focus:border-gray-500" name="username" required>
+                        </div>
+                        <div class="grid gap-2">
+                            <label class="text-lg text-primaryDark font-medium" for="">Email</label>
+                            <input type="email" class="outline-none focus:bg-headerBg text-lg pb-2 py-1 px-4 border border-gray-400 border-solid rounded w-full focus:border-gray-500" name="email" required>
+                        </div>
+                        <div class="grid gap-2">
+                            <label class="text-lg text-primaryDark font-medium" for="">Password</label>
+                            <input type="password" class="outline-none focus:bg-headerBg text-lg pb-2 py-1 px-4 border border-gray-400 border-solid rounded w-full focus:border-gray-500" name="password" required>
+                        </div>
+                        <div class="grid gap-2">
+                            <label class="text-lg text-primaryDark font-medium" for="">Confirm Password</label>
+                            <input type="password" class="outline-none focus:bg-headerBg text-lg pb-2 py-1 px-4 border border-gray-400 border-solid rounded w-full focus:border-gray-500" name="confirm-password" required>
+                        </div>
+                        <div class="grid gap-2">
+                            <input class="outline-none text-lg font-medium pb-2 py-1 px-4 bg-primary cursor-pointer hover:bg-primaryDark text-white text-base rounded" type="submit" value="Register">
+                        </div>
+                        <a href="{% url 'auth_app:login' %}" class="text-center text-base text-primary">Already have an account.</a>
+                    </form>
+                </div>
+            </section>
+        </main>
+
+{% endblock %}

@@ -1,0 +1,80 @@
+{% extends 'layout.html' %}
+{% block content %}
+
+        <!-- hero section -->
+
+        <section class="hero">
+            <div class="grid md:flex hero-area gap-12 w-9/12">
+                <div class="hero-content">
+                    <h1 class="text-white text-5xl md:text-7xl font-black w-8/12">Travel and Explore</h1>
+                    <p class="text-2xl font-medium text-slate-200 leading-6">Making your travel dreams a reality.</p>
+                    <div class="flex gap-3">
+                        <a href="{% url 'eruna:destinations' %}" class="flex justify-center items-center text-2xl text-white bg-primaryDark hover:bg-primary px-8 py-1 pb-2 transition-colors duration-300 ease-in-out rounded-lg justify-self-start">Book Vacation</a>
+                    </div>
+                </div>
+                <div class="side-imgs flex md:grid">
+                    <img src="https://images.unsplash.com/photo-1581918629062-2b6cfdd04060?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8dWdhbmRhfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60" data-index="0" data-location="western Uganda" alt="">
+                    <img src="https://images.unsplash.com/photo-1553521306-9728831d2983?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTl8fHVnYW5kYXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60" data-index="1" data-location="Eastern Uganda" alt="">
+                    <img src="https://images.pexels.com/photos/11264156/pexels-photo-11264156.jpeg?auto=compress&cs=tinysrgb&w=600" data-index="2" data-location="Northern Uganda" alt="">
+                </div>
+            </div>
+            <div class="img-location">
+                <p class="flex gap-2 items-center text-xl md:text-slate-100 text-slate-300">
+                    <i class="fa fa-map-marker"></i>
+                    <span></span>
+                </p>
+            </div>
+        </section>
+
+        <!-- hero section -->
+
+        <!-- business intro -->
+
+        <section class="about md:min-h-screen grid gap-5 mt-9 my-3 mb-0 w-10/12 md:w-9/12 mx-auto justify-center content-start">
+            <div class="section-header grid gap-2 text-center justify-center">
+                <h3 class="text-3xl font-semibold text-primaryDark leading-7">What is Eruna Safaris</h3>
+                <p class="text-xl leading-6 text-gray-600 md:w-10/12 mx-auto">
+                    Eruna Safaris is a tours and safari company in the heart of Uganda, offering tours to all parts of Uganda.
+                </p>
+            </div>
+            <div class="imgs container justify-center">
+                <div class="img-wrapper left">
+                    <img src="https://images.pexels.com/photos/6056860/pexels-photo-6056860.jpeg?auto=compress&cs=tinysrgb&w=600" alt="" srcset="">
+                    <p class="flex gap-2 items-center text-lg text-slate-200 font-medium justify-center p-5">
+                        <i class="fa fa-map-marker"></i>
+                        <span class="leading-5">Murchison Falls National Park</span>
+                    </p>
+                </div>
+                <div class="img-wrapper center">
+                    <img src="https://images.unsplash.com/photo-1614528767034-70de9fe166e0?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8dWdhbmRhfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60" alt="" srcset="">
+                    <p class="flex gap-2 items-center text-lg text-slate-200 font-medium justify-center p-5">
+                        <i class="fa fa-map-marker"></i>
+                        <span class="leading-5">Bwindi Impenetrable National Park</span>
+                    </p>
+                </div>
+                <div class="img-wrapper bottom">
+                    <img src="https://images.pexels.com/photos/34098/south-africa-hluhluwe-giraffes-pattern.jpg?auto=compress&cs=tinysrgb&w=600" alt="" srcset="">
+                    <p class="flex gap-2 items-center text-lg text-slate-200 font-medium justify-center p-5">
+                        <i class="fa fa-map-marker"></i>
+                        <span class="leading-5">Lake Mburo National Park</span>
+                    </p>
+                </div>
+                <div class="img-wrapper right">
+                    <img src="https://images.pexels.com/photos/10740862/pexels-photo-10740862.jpeg?auto=compress&cs=tinysrgb&w=600" alt="" srcset="">
+                    <p class="flex gap-2 items-center text-lg text-slate-200 font-medium justify-center p-5">
+                        <i class="fa fa-map-marker"></i>
+                        <span class="leading-5">Lake Mburo National Park</span>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- business intro -->
+
+        <!-- destinations -->
+
+        {% include './utils/destination-list.html' %}
+
+        <!-- destinations -->
+
+{% endblock %}

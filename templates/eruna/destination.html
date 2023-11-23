@@ -1,0 +1,117 @@
+{% extends 'layout.html' %}
+{% block content %}
+
+        <!-- destinations -->
+
+        <section class="destination-detail w-full grid">
+            <div class="destination-imgs img-wrapper relative">
+                {% for img in images %}
+                    {% if img.online_url %}
+                        <img src="{{ img.online_url }}" alt="{{ destination.name }}" data-index=0 data-source="{{ img.online_url }}">
+                    {% else %}
+                        <img src="/media/{{ img.img_url }}" alt="{{ destination.name }}" data-index=0 data-source="/media/{{ img.img_url }}">
+                    {% endif %}
+                {% endfor %}
+
+                {% if images|length > 1 %}
+
+                    <div class="controls flex justify-between gap-4 ">
+                        <button class="outline-none px-4 py-4 bg-headerBg hover:bg-hoverBackgroundColor transition-colors duration-300 ease-in-out" data-id="previous">&#10092;</button>
+                        <button class="outline-none px-4 py-4 bg-headerBg hover:bg-hoverBackgroundColor transition-colors duration-300 ease-in-out" data-id="next">&#10093;</button>
+                    </div>
+
+                {% endif %}
+                
+                <a href="" id="img-source" class="flex max-w-lg border border-solid border-transparent overflow-hidden items-center text-base font-medium text-slate-100 gap-2 leading-5">
+                    <span>Source: </span>
+                    <span id="source"></span>
+                </a>
+            </div>
+            <div class="grid gap-2 p-5 md:px-20 content-center">
+                <h1 class="text-primaryDark text-3xl md:text-4xl font-semibold leading-10">{{ destination.name }}</h1>
+                <p class="text-lg text-gray-900 md:w-11/12 leading-6">
+                    {{ destination.description }}
+                </p>
+                <a href="{{ destination.related_url }}" target="_blank" class="text-primary text-lg flex items-center gap-1"><span>Read More</span> 
+                    <!-- <span>&#8594</span> -->
+                </a>
+                <form class="grid gap-6" action="{% url 'booking:vacations' destination.slug %}" method="POST">
+                    {% csrf_token %}
+                    <div class="flex flex-wrap gap-4">
+                        <div class="flex gap-2 items-center w-10/12 md:w-5/12">
+                            <label class="font-medium text-base" for="startDate">Start Date: </label>
+                            <input class="py-1 pb-2 text-base px-4 bg-transparent border border-solid border-slate-300 outline-none rounded-md flex flex-1 items-center justify-center text-center" type="date" name="start-date" id="startDate" required onchange="setDuration()">
+                        </div>
+    
+                        <div class="flex gap-2 items-center w-10/12 md:w-5/12">
+                            <label class="font-medium text-base" for="endDate">End Date: </label>
+                            <input class="py-1 pb-2 text-base px-4 bg-transparent border border-solid border-slate-300 outline-none rounded-md flex flex-1 items-center justify-center text-center" type="date" name="end-date" id="endDate" de required onchange="setDuration()">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 md:flex gap-5">
+                        <div class="grid gap-3 border border-solid border-slate-200 items-center justify-items-center p-5 px-8">
+                            <span class="font-semibold text-lg text-slate-900 leading-5">Duration</span>
+                            <span class="font-medium text-xl text-slate-600 leading-5"><span id="bookingDuration">1</span> Day(s) </span>
+                        </div>
+                        <div class="grid gap-3 border border-solid border-slate-200 items-center justify-items-center p-5 px-8">
+                            <span class="font-semibold text-lg text-slate-900 leading-5">Amount</span>
+                            <span class="font-medium text-xl text-slate-600 leading-5">${{destination.price}} </span>
+                        </div>
+                    </div>
+                    {% if not booking_exists %}
+                        <input type="submit" class="flex text-xl text-white bg-primaryDark hover:bg-primary px-8 py-1 pb-2 transition-colors duration-300 ease-in-out rounded-lg justify-self-start cursor-pointer" value="Book Vacation"/>
+                    {% endif %}
+                </form>
+            </div>
+        </section>
+
+        <script>
+            const setDuration = () => {
+                const startDate = document.querySelector('#startDate');
+                const endDate = document.querySelector('#endDate');
+                const bookingDuration = document.querySelector('#bookingDuration');
+                
+                if ((startDate.value !== null && startDate.value !== undefined) && (endDate.value !== null && endDate.value !== undefined))
+                {
+                    console.log(startDate.value, endDate.value)
+                    let numOfDates = datediff(parseDate(startDate.value), parseDate(endDate.value))
+                    bookingDuration.textContent = numOfDates;
+                }
+            }
+
+            function parseDate(str) {
+                var mdy = str.split('-');   
+                return new Date(mdy[0], mdy[1], mdy[2]);
+            }
+
+            function datediff(first, second) {
+                // Take the difference between the dates and divide by milliseconds per day.
+                // Round to nearest whole number to deal with DST.
+                return Math.round((second-first)/(1000*60*60*24));
+            }
+
+            const setDefaultDate = () => {
+
+                const startDate = document.querySelector('#startDate');
+                const endDate = document.querySelector('#endDate');
+
+                var date = new Date();
+
+                var day = date.getDate();
+                var month = date.getMonth() + 1;
+                var year = date.getFullYear();
+
+                if (month < 10) month = "0" + month;
+                if (day < 10) day = "0" + day;
+
+                var today = year + "-" + month + "-" + day;
+
+                startDate.value = today;
+                endDate.value = today;
+            }
+            
+            setDefaultDate();    
+
+        </script>
+        
+{% endblock %}

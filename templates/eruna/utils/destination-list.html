@@ -1,0 +1,48 @@
+{% block content %}
+
+<section class="min-h-screen grid gap-6 my-10 w-10/12 md:w-9/12 mx-auto content-start justify-center">
+    <div class="section-header grid gap-1 text-center justify-center">
+        <h3 class="text-3xl font-semibold text-primaryDark leading-7">Our Destinations</h3>
+        <p class="text-xl leading-6 text-gray-600 md:w-10/12 mx-auto">
+            With our talented travel gruides, DestiFind makes exploring Uganda very easy.
+        </p>
+    </div>
+    <div class="container grid gap-6 md:grid-cols-3">
+        {% for destination in destinations %}
+            <a href="{% url 'eruna:destination-detail' destination.slug %}" class="destination-card">
+                <div class="img-wrapper">
+                    {% for img in destination_cover_imgs %}
+                        {% if img.destination.name == destination.name %}
+                            {% if img.online_url %}
+                                <img src="{{ img.online_url }}" alt="{{ destination.name }}">
+                            {% else %}
+                                <img src="/media/{{ img.img_url }}" alt="{{ destination.name }}">
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <div class="card-body flex items-center justify-between">
+                    <div class="grid gap-1 content-start items-start">
+                        <h2 class="text-2xl text-white hover:text-slate-200 transition-colors duration-300 ease-in-out font-bold leading-6">{{ destination.name }}</h2>
+                        <div class="flex gap-2">
+                            <p class="flex gap-1 text-slate-100 items-center justify-center">
+                                <i class="text-sm fa fa-map-marker"></i>
+                                <span class="text-base">{{ destination.location }}</span>
+                            </p>
+                            <!-- <p class="flex gap-1 text-slate-100 items-center justify-center">
+                                <i class="text-sm fa fa-clock-o"></i>
+                                <span class="text-base">2 Days</span>
+                            </p> -->
+                        </div>
+                    </div>
+                    <div class="flex gap-0.5 items-baseline">
+                        <span class="font-medium text-slate-100">&dollar;</span>
+                        <span class="text-3xl text-white font-bold">{{ destination.price }}</span>
+                    </div>
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+</section>
+
+{% endblock %}

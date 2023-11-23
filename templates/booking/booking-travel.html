@@ -1,0 +1,119 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% block content %}
+        
+        <section class="md:min-h-screen grid gap-6 mt-9 my-3 mb-0 w-10/12 md:w-9/12 mx-auto content-start">
+
+            {% if not user.is_authenticated %}
+                <div class="border-2 border-solid border-red-700 px-6 py-2 text-red-700 text-lg rounded-md font-semibold">
+                    <p>Please sign in to complete this request.</p>
+                </div>
+            {% endif %}
+            <div class="grid gap-2 px-2">
+                <h3 class="text-2xl text-primaryDark font-semibold">Order Summary</h3>
+                <hr>
+            </div>
+            <div class="grid gap-4 px-2">
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div class="grid gap-0.5">
+                        <h4 class="leading-5 text-xl text-primaryDark">Name of Destination</h4>
+                        <p class="text-xl font-semibold text-primary">{{ destination.name }}</p>
+                    </div>
+                    <div class="grid gap-0.5">
+                        <h4 class="leading-5 text-xl text-primaryDark">Total Price</h4>
+                        <p class="text-xl font-semibold flex gap-0.5 items-baseline">
+                            <span class="font-medium text-primary">&dollar;</span>
+                            <span class="text-3xl text-primaryDark font-bold" id="total-price">{{ total_price }}</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div class="grid gap-0.5">
+                        <h4 class="leading-5 text-xl text-primaryDark">Start Date</h4>
+                        <p class="text-xl font-semibold text-primary">{{ start_date }}</p>
+                    </div>
+                    <div class="grid gap-0.5">
+                        <h4 class="leading-5 text-xl text-primaryDark">End Date</h4>
+                        <p class="text-xl font-semibold text-primary">{{ end_date }}</p>
+                    </div>
+                </div>
+            </div>
+
+            {% if user.is_authenticated %}
+                <div class="grid gap-1">
+                    <div class="grid gap-2 px-2">
+                        <h3 class="text-2xl text-primaryDark font-semibold">Make Payment</h3>
+                        <hr>
+                    </div>
+                    <div class="grid gap-1 md:grid-cols-3">
+                        <div class="flex justify-center p-3" id="paypal-button-container"></div>
+                    </div>
+                </div>
+            {% endif %}
+        </section>
+
+<script>
+    // payment
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    paypal.Buttons({
+
+        style: {
+            color: 'gold',
+            shape: 'rect',
+            label: 'paypal',
+            layout: 'vertical'
+        },
+
+        // Sets up the transaction when a payment button is clicked
+
+        createOrder: (data, actions) => { 
+            return actions.order.create({    
+                purchase_units: [{    
+                    amount: {
+                        currency_code: 'USD',
+                        value: '{{total_price}}'
+                    }    
+                }]    
+            });    
+        },
+
+        // Finalize the transaction after payer approval    
+        onApprove: (data, actions) => {
+            let url = "{% url 'booking:vacations-payment' %}";
+            return fetch(url, {
+                method: 'POST',
+                headers: {'X-CSRFToken': getCookie('csrftoken')},
+                mode: 'same-origin',
+                body: JSON.stringify({
+                    orderID: data.orderID,
+                    destinationID: '{{destination.id}}',
+                    startDate: '{{start_date}}',
+                    endDate: '{{end_date}}',
+                    mode_of_payment: 'Paypal'
+                })
+            })
+                .then(() => {
+                    location.href = "{% url 'booking:bookings' %}";
+                })
+        }
+
+    }).render('#paypal-button-container');
+
+</script>
+
+{% endblock %}

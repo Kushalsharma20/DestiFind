@@ -1,0 +1,16 @@
+creating virtual environment
+    python -m venv venv
+
+
+activating the virtual environment
+    ./venv/Scripts/activate
+
+install dependencies
+    pip install -r requirements.txt
+
+migrations
+    python manage.py makemigrations
+    python manage.py migrate
+
+start the app
+    python manage.py runserver

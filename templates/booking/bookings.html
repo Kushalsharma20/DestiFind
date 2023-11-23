@@ -1,0 +1,74 @@
+{% extends 'layout.html' %}
+{% block content %} 
+        <section class="md:min-h-screen grid gap-8 my-5 mb-0 w-10/12 md:w-9/12 mx-auto content-start">
+
+
+            {% if messages %}
+            {% for message in messages %}
+                {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %} 
+                    <div class="flex justify-between items-center border-2 border-solid border-red-700 px-6 pb-3 py-2 text-red-700 text-lg rounded-md font-semibold leading-5" onclick="(function(){event.target.style.display = 'none';return false;})()">
+                        <p>{{ message }}</p>
+                        <button class="flex justify-center items-center font-medium"><i class="fa fa-close"></i></button>
+                    </div>
+                {% elif message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %} 
+                    <div class="flex justify-between items-center border-2 border-solid border-green-500 px-6 py-2 text-green-500 text-lg rounded-md font-semibold leading-5" onclick="(function(){event.target.style.display = 'none';return false;})()">
+                        <p>{{ message }}</p>
+                        <button class="flex justify-center items-center font-medium"><i class="fa fa-close"></i></button>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            {% if not user.is_authenticated %}
+                
+                <div class="flex justify-between items-center border-2 border-solid border-red-700 px-6 pb-3 py-2 text-red-700 text-lg rounded-md font-semibold leading-5" onclick="(function(){event.target.style.display = 'none';return false;})()">
+                    <p>Please sign in to access your bookings.</p>
+                    <button class="flex justify-center items-center font-medium"><i class="fa fa-close"></i></button>
+                </div>
+
+                <a href="{% url 'auth_app:login' %}" class="flex justify-center items-center text-xl font-medium text-white bg-primary hover:bg-primaryDark px-6 py-1 pb-2 transition-colors duration-300 ease-in-out rounded-md justify-self-start">Login</a>
+            {% else %}
+                <div class="grid gap-2 px-2">
+                    <h3 class="text-2xl text-primaryDark font-semibold">Travels</h3>
+                    <hr>
+                    <div class="grid gap-2">
+                        {% for vacation in vacations %}
+                            <div class="grid gap-1 p-2 px-4 rounded-md border border-solid border-slate-300">
+                                <div class="flex justify-between gap-0.5">
+                                    <h3 class="text-xl font-medium text-primaryDark leading-8">
+                                        {{ vacation.destination.name }}
+                                    </h3>
+                                    <p class="text-xl font-semibold flex gap-0.5 items-baseline leading-8">
+                                        <span class="font-medium text-primary">&dollar;</span>
+                                        <span class="text-3xl text-primaryDark font-bold">{{ vacation.total_price }}</span>
+                                    </p>
+                                </div>
+                                <div class="flex flex-wrap gap-2 md:gap-6">
+                                    <p class="text-base flex flex-wrap gap-2 leading-5">
+                                        <span class="text-slate-900">Start Date: {{ vacation.start_date }}</span>
+                                        <span class="text-slate-900">End Date: {{ vacation.end_date }}</span>
+                                    </p>
+                                    <p class="text-base flex flex-wrap gap-1 leading-5">
+                                        <span class="text-slate-900">Booked On: </span>
+                                        <span class="text-slate-900">{{ vacation.added_on }}</span>
+                                    </p>
+                                </div>
+                                <p class="text-base flex flex-wrap gap-1 leading-5 font-medium text-primary">
+                                    {% if vacation.is_complete %}
+                                        <span class="text-slate-900">Completed</span>
+                                    {% else %}
+                                        <span class="text-slate-900">Pending</span>
+                                    {% endif %}
+                                </p>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    {% if not vacations %}
+                        <p class="text-center text-lg text-slate-700">No Vacations Found.</p>
+                    {% endif %}
+                </div>
+            {% endif %}
+            
+        </section>
+
+{% endblock %}

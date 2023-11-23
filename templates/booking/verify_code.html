@@ -1,0 +1,12 @@
+{% extends 'layout.html' %}
+{% block content %}
+
+    <form method="POST" class="grid gap-2 container m-10 w-5/12 mx-auto">
+    {{code}}
+        {% csrf_token %}
+        <label for="">Enter Verification Code</label>
+        <input type="text" name="verify_code" class="border border-solid border-black p-4">
+        <input type="submit" value="Submit" class="flex text-xl text-white bg-primaryDark hover:bg-primary px-8 py-1 pb-2 transition-colors duration-300 ease-in-out rounded-lg justify-self-start cursor-pointer">
+    </form>
+
+{% endblock %}
